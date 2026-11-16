@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>clodNx – ERPNext implementation and consulting</title>
+<meta name="description" content="clodNx helps growing businesses implement, customise and run ERPNext. Implementation, data migration, integrations, training and ongoing support.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F4FD8'/%3E%3Ctext x='16' y='22' font-size='18' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='white'%3En%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --ink:#101828; --muted:#5D6778;
+  --rule:#DDE2E9; --accent:#1F4FD8; --accent-soft:#E8EEFC;
+  --head:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--head);font-weight:700;letter-spacing:-0.02em;line-height:1.1}
+
+/* nav */
+header{border-bottom:1px solid var(--rule);background:var(--bg);position:sticky;top:0;z-index:5}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:var(--head);font-weight:700;font-size:1.35rem;text-decoration:none;letter-spacing:-0.03em}
+.logo span{color:var(--accent)}
+.nav ul{display:flex;gap:28px;list-style:none;align-items:center}
+.nav a.link{text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:500}
+.nav a.link:hover{color:var(--ink)}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 20px;border-radius:8px;border:1px solid var(--accent)}
+.btn:hover{background:#163db0;border-color:#163db0}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{background:var(--surface);border-color:var(--muted)}
+
+/* hero */
+.hero{padding:88px 0 80px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5.2vw,3.9rem)}
+.hero p.lead{margin-top:22px;font-size:1.15rem;color:var(--muted);max-width:34em}
+.hero .actions{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+
+/* ledger */
+.ledger{background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.ledger-head{display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--accent-soft);font-size:.85rem;color:var(--accent);font-weight:600}
+.ledger dl{display:grid}
+.ledger .row{display:flex;justify-content:space-between;gap:16px;padding:13px 20px;border-bottom:1px solid var(--rule);font-size:.95rem}
+.ledger .row:last-child{border-bottom:0}
+.ledger dt{font-weight:600}
+.ledger dd{color:var(--muted);text-align:right}
+
+/* sections */
+section{padding:84px 0;border-top:1px solid var(--rule)}
+.sec-head{max-width:620px;margin-bottom:48px}
+.sec-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem)}
+.sec-head p{margin-top:14px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.two p+p{margin-top:16px}
+.two p{color:var(--muted)}
+.two p strong{color:var(--ink);font-weight:600}
+
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.service{padding:30px 28px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.service:nth-child(3n){border-right:0}
+.service:nth-last-child(-n+3){border-bottom:0}
+.service h3{font-size:1.2rem;margin-bottom:10px}
+.service p{color:var(--muted);font-size:.97rem}
+
+.steps{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:20px;counter-reset:s}
+.steps li{counter-increment:s;border-top:2px solid var(--ink);padding-top:16px}
+.steps li::before{content:counter(s);font-family:var(--head);font-weight:700;color:var(--accent);font-size:1.1rem}
+.steps h3{font-size:1.1rem;margin:6px 0 8px}
+.steps p{font-size:.92rem;color:var(--muted)}
+
+.cta{background:var(--ink);color:#fff;border-radius:16px;padding:56px 48px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.cta h2{font-size:clamp(1.7rem,3vw,2.3rem);max-width:15em}
+.cta p{color:#B7C0CE;margin-top:12px;max-width:32em}
+.cta .btn{background:#fff;color:var(--ink);border-color:#fff}
+.cta .btn:hover{background:var(--accent-soft)}
+
+footer{border-top:1px solid var(--rule);padding:32px 0;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero-grid,.two{grid-template-columns:1fr;gap:40px}
+  .services{grid-template-columns:1fr 1fr}
+  .service:nth-child(3n){border-right:1px solid var(--rule)}
+  .service:nth-child(2n){border-right:0}
+  .service:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
+  .service:nth-last-child(-n+2){border-bottom:0}
+  .steps{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  .nav ul li:not(:last-child){display:none}
+  .hero{padding:56px 0}
+  section{padding:60px 0}
+  .services{grid-template-columns:1fr}
+  .service{border-right:0 !important;border-bottom:1px solid var(--rule) !important}
+  .service:last-child{border-bottom:0 !important}
+  .steps{grid-template-columns:1fr}
+  .cta{padding:36px 26px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">clod<span>Nx</span></a>
+    <ul>
+      <li><a class="link" href="#about">About ERPNext</a></li>
+      <li><a class="link" href="#services">Services</a></li>
+      <li><a class="link" href="#process">Process</a></li>
+      <li><a class="btn" href="#contact">Book a call</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>ERPNext, set up properly and built around how you work.</h1>
+        <p class="lead">clodNx helps growing businesses implement, customise and run ERPNext, from the first planning workshop to the day your team stops using spreadsheets.</p>
+        <div class="actions">
+          <a class="btn" href="#contact">Book a free consultation</a>
+          <a class="btn ghost" href="#services">See our services</a>
+        </div>
+      </div>
+
+      <div class="ledger" aria-label="ERPNext modules we work with">
+        <div class="ledger-head"><span>ERPNext module</span><span>What it covers</span></div>
+        <dl>
+          <div class="row"><dt>Accounting</dt><dd>Invoices, GST, ledgers</dd></div>
+          <div class="row"><dt>Selling and CRM</dt><dd>Leads, quotes, orders</dd></div>
+          <div class="row"><dt>Buying</dt><dd>Suppliers, purchase orders</dd></div>
+          <div class="row"><dt>Inventory</dt><dd>Stock, warehouses, batches</dd></div>
+          <div class="row"><dt>Manufacturing</dt><dd>BOMs, work orders</dd></div>
+          <div class="row"><dt>HR and Payroll</dt><dd>Attendance, leave, salary</dd></div>
+          <div class="row"><dt>Projects</dt><dd>Tasks, timesheets, billing</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap two">
+      <div class="sec-head" style="margin-bottom:0">
+        <h2>What is ERPNext?</h2>
+      </div>
+      <div>
+        <p><strong>ERPNext is an open-source ERP system</strong> that brings accounting, sales, purchasing, inventory, manufacturing, HR and projects into one database, so every team works from the same numbers.</p>
+        <p>There are no per-user licence fees, you can host it yourself or in the cloud, and it can be customised without breaking upgrades. The software is the easy part. Fitting it to your workflows, cleaning your data and training your people is where most projects succeed or fail, and that is the work we do.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Services</h2>
+        <p>Pick one service or have us handle the whole project. Either way you get a single point of contact.</p>
+      </div>
+      <div class="services">
+        <div class="service">
+          <h3>Implementation</h3>
+          <p>Company setup, chart of accounts, taxes, roles and permissions, configured for your business rather than left at defaults.</p>
+        </div>
+        <div class="service">
+          <h3>Consulting and process mapping</h3>
+          <p>We review how you sell, buy, stock and pay today, then design the simplest ERPNext setup that fits.</p>
+        </div>
+        <div class="service">
+          <h3>Customisation</h3>
+          <p>Custom fields, print formats, workflows, reports and apps built on the Frappe framework, kept upgrade-safe.</p>
+        </div>
+        <div class="service">
+          <h3>Data migration</h3>
+          <p>Customers, items, opening balances and history moved from Tally, Excel or your old ERP, cleaned and checked before go-live.</p>
+        </div>
+        <div class="service">
+          <h3>Integrations</h3>
+          <p>Connect ERPNext to payment gateways, e-commerce, shipping, e-invoicing, WhatsApp, biometric devices and your other tools.</p>
+        </div>
+        <div class="service">
+          <h3>Training and support</h3>
+          <p>Hands-on sessions for each team, written guides, and a support plan for fixes, upgrades and new requests after launch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>How a project runs</h2>
+        <p>A clear sequence with a sign-off at each stage, so you always know what happens next.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Discover</h3><p>Workshops to understand your processes, pain points and goals.</p></li>
+        <li><h3>Configure</h3><p>Build and customise ERPNext on a test site you can try early.</p></li>
+        <li><h3>Migrate</h3><p>Import and reconcile your data, then run a dry run.</p></li>
+        <li><h3>Train</h3><p>Teach each team using your own data and workflows.</p></li>
+        <li><h3>Support</h3><p>Go live with us alongside, then continue with a support plan.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h2>Thinking about ERPNext for your business?</h2>
+          <p>Tell us what you run today and what you want to fix. We will reply within one working day with honest advice, even if the answer is that ERPNext is not the right fit.</p>
+        </div>
+        <a class="btn" href="mailto:hello@clodnx.com?subject=ERPNext%20consultation">hello@clodnx.com</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 clodNx. All rights reserved.</span>
+    <span>ERPNext is a trademark of Frappe Technologies. clodNx is an independent consultancy.</span>
+  </div>
+</footer>
+
+</body>
+</html>
