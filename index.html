@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>clodNx – ERPNext implementation and consulting</title>
-<meta name="description" content="clodNx helps growing businesses implement, customise and run ERPNext. Implementation, data migration, integrations, training and ongoing support.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F4FD8'/%3E%3Ctext x='16' y='22' font-size='18' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='white'%3En%3C/text%3E%3C/svg%3E">
+<title>clodNx – ERPNext, HRMS, AI agents and custom IT solutions</title>
+<meta name="description" content="clodNx is an IT company helping small businesses with ERPNext, HRMS, supply chain, identity verification, AI agents and RAG solutions.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<meta name="theme-color" content="#14123F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F7F8FA; --surface:#FFFFFF; --ink:#101828; --muted:#5D6778;
-  --rule:#DDE2E9; --accent:#1F4FD8; --accent-soft:#E8EEFC;
+  --bg:#F5F6FB; --surface:#FFFFFF; --ink:#14123F; --muted:#5A5E7A;
+  --rule:#E0E2EE; --accent:#3A36C9; --accent-soft:#ECEBFC; --spark:#F5A524;
   --head:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --body:"Figtree","Segoe UI",system-ui,sans-serif;
 }
@@ -28,13 +29,14 @@ h1,h2,h3{font-family:var(--head);font-weight:700;letter-spacing:-0.02em;line-hei
 /* nav */
 header{border-bottom:1px solid var(--rule);background:var(--bg);position:sticky;top:0;z-index:5}
 .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
-.logo{font-family:var(--head);font-weight:700;font-size:1.35rem;text-decoration:none;letter-spacing:-0.03em}
-.logo span{color:var(--accent)}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:700;font-size:1.35rem;text-decoration:none;letter-spacing:-0.03em}
+.logo em{font-style:normal;color:var(--accent)}
+.mark{width:36px;height:36px;flex:none}
 .nav ul{display:flex;gap:28px;list-style:none;align-items:center}
 .nav a.link{text-decoration:none;color:var(--muted);font-size:.95rem;font-weight:500}
 .nav a.link:hover{color:var(--ink)}
 .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;padding:11px 20px;border-radius:8px;border:1px solid var(--accent)}
-.btn:hover{background:#163db0;border-color:#163db0}
+.btn:hover{background:#2723A0;border-color:#2723A0}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
 .btn.ghost:hover{background:var(--surface);border-color:var(--muted)}
 
@@ -45,8 +47,43 @@ header{border-bottom:1px solid var(--rule);background:var(--bg);position:sticky;
 .hero p.lead{margin-top:22px;font-size:1.15rem;color:var(--muted);max-width:34em}
 .hero .actions{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
 
+/* hero slides */
+.slides{display:grid}
+.slide{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s}
+.slide.on{opacity:1;visibility:visible}
+.hero-tabs{position:relative;display:flex;gap:16px;margin-top:56px;overflow-x:auto;scrollbar-width:none}
+.hero-tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;flex:1 0 auto;min-width:128px;text-align:left;background:none;border:0;border-top:2px solid var(--rule);padding:14px 12px 0 0;font:inherit;font-size:.92rem;font-weight:600;color:var(--muted);cursor:pointer}
+.tab:hover,.tab.on{color:var(--ink)}
+.tab:focus-visible{outline-offset:-2px}
+.tab::after{content:"";position:absolute;left:0;top:-2px;height:2px;width:0;background:var(--spark)}
+.tab.on::after{animation:fill 7s linear forwards}
+.paused .tab.on::after{animation-play-state:paused}
+@keyframes fill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.slide{transition:none}.tab.on::after{animation:none;width:100%}}
+
+/* hero colour themes: one per slide, switched by data-t on .hero */
+.hero{--h-bg:#F5F6FB;--h-ink:#14123F;--h-muted:#5A5E7A;--h-line:#E0E2EE;--h-btn:#3A36C9;--h-btn-text:#fff;--h-accent:#3A36C9;--h-soft:#ECEBFC;--h-prog:#F5A524;background:var(--h-bg);color:var(--h-ink);transition:background-color .7s ease,color .7s ease}
+.hero[data-t="0"]{--h-bg:#F5F6FB;--h-ink:#14123F;--h-muted:#5A5E7A;--h-line:#E0E2EE;--h-btn:#3A36C9;--h-btn-text:#fff;--h-accent:#3A36C9;--h-soft:#ECEBFC;--h-prog:#F5A524;}
+.hero[data-t="1"]{--h-bg:#14123F;--h-ink:#fff;--h-muted:#B9BCD6;--h-line:#4A4780;--h-btn:#F5A524;--h-btn-text:#14123F;--h-accent:#3A36C9;--h-soft:#ECEBFC;--h-prog:#F5A524;}
+.hero[data-t="2"]{--h-bg:#E4F3EF;--h-ink:#0B2B2A;--h-muted:#4A6B69;--h-line:#BBD9D2;--h-btn:#0F766E;--h-btn-text:#fff;--h-accent:#0F766E;--h-soft:#DCEFEA;--h-prog:#F5A524;}
+.hero[data-t="3"]{--h-bg:#FDF0D5;--h-ink:#2B1B05;--h-muted:#6B5326;--h-line:#E6CE9B;--h-btn:#9A4F07;--h-btn-text:#fff;--h-accent:#9A4F07;--h-soft:#FBE6BD;--h-prog:#2B1B05;}
+.hero[data-t="4"]{--h-bg:#2A1233;--h-ink:#fff;--h-muted:#D3BFD9;--h-line:#6A4474;--h-btn:#FFB4CF;--h-btn-text:#2A1233;--h-accent:#7A2A8F;--h-soft:#F3E6F7;--h-prog:#FFB4CF;}
+.hero p.lead{color:var(--h-muted)}
+.hero .btn{background:var(--h-btn);color:var(--h-btn-text);border-color:var(--h-btn)}
+.hero .btn:not(.ghost):hover{background:var(--h-btn);border-color:var(--h-btn);filter:brightness(.9)}
+.hero .btn.ghost{background:transparent;color:var(--h-ink);border-color:var(--h-line)}
+.hero .btn.ghost:hover{background:transparent;border-color:var(--h-ink)}
+.hero .tab{color:var(--h-muted);border-top-color:var(--h-line)}
+.hero .tab:hover,.hero .tab.on{color:var(--h-ink)}
+.hero .tab:focus-visible,.hero .btn:focus-visible{outline-color:var(--h-ink)}
+.hero .tab::after{background:var(--h-prog)}
+.hero .ledger-head{background:var(--h-soft);color:var(--h-accent)}
+.hero p.lead,.hero .btn,.hero .tab{transition:color .7s ease,background-color .7s ease,border-color .7s ease}
+@media (prefers-reduced-motion:reduce){.hero,.hero p.lead,.hero .btn,.hero .tab{transition:none}}
+
 /* ledger */
-.ledger{background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.ledger{color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden;border-top:3px solid var(--spark)}
 .ledger-head{display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--accent-soft);font-size:.85rem;color:var(--accent);font-weight:600}
 .ledger dl{display:grid}
 .ledger .row{display:flex;justify-content:space-between;gap:16px;padding:13px 20px;border-bottom:1px solid var(--rule);font-size:.95rem}
@@ -77,45 +114,78 @@ section{padding:84px 0;border-top:1px solid var(--rule)}
 .steps h3{font-size:1.1rem;margin:6px 0 8px}
 .steps p{font-size:.92rem;color:var(--muted)}
 
-.cta{background:var(--ink);color:#fff;border-radius:16px;padding:56px 48px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
-.cta h2{font-size:clamp(1.7rem,3vw,2.3rem);max-width:15em}
-.cta p{color:#B7C0CE;margin-top:12px;max-width:32em}
-.cta .btn{background:#fff;color:var(--ink);border-color:#fff}
-.cta .btn:hover{background:var(--accent-soft)}
+.service .inc{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:.86rem;font-weight:500}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.trio>div{padding:30px 28px;border-right:1px solid var(--rule)}
+.trio>div:last-child{border-right:0}
+.trio h3{font-size:1.2rem;margin-bottom:10px}
+.trio p,.path li{color:var(--muted);font-size:.97rem}
+.path{list-style:none;border-left:2px solid var(--rule);padding-left:18px;margin-top:14px;display:grid;gap:10px}
+.path li{position:relative}
+.path li::before{content:"";position:absolute;left:-24px;top:.5em;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.path li:last-child::before{background:var(--spark)}
 
-footer{border-top:1px solid var(--rule);padding:32px 0;color:var(--muted);font-size:.9rem}
-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.contact-info h2{font-size:clamp(1.8rem,3.4vw,2.5rem)}
+.contact-info p{color:var(--muted);margin-top:14px;max-width:30em}
+.channels{margin-top:28px;display:grid;gap:12px;max-width:380px}
+.channel{display:flex;flex-direction:column;padding:16px 20px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);text-decoration:none}
+.channel:hover{border-color:var(--accent)}
+.channel small{color:var(--muted);font-size:.85rem}
+.channel b{font-weight:600;font-size:1.05rem}
+form{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:28px;display:grid;gap:18px;border-top:3px solid var(--spark)}
+.field{display:grid;gap:6px}
+label{font-weight:600;font-size:.92rem}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:11px 13px;width:100%}
+textarea{min-height:130px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.fields2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+button.btn{font-family:var(--body);font-size:.95rem;cursor:pointer;justify-self:start}
+.note{font-size:.88rem;color:var(--muted)}
+
+footer{background:var(--ink);padding:36px 0;color:#B9BCD6;font-size:.88rem}
+footer .logo{color:#fff}
+footer .logo em{color:#9A97FF}
+footer .wrap>span{max-width:30em}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 
 @media (max-width:900px){
-  .hero-grid,.two{grid-template-columns:1fr;gap:40px}
+  .hero-grid,.two,.contact-grid{grid-template-columns:1fr;gap:40px}
   .services{grid-template-columns:1fr 1fr}
   .service:nth-child(3n){border-right:1px solid var(--rule)}
   .service:nth-child(2n){border-right:0}
   .service:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
   .service:nth-last-child(-n+2){border-bottom:0}
   .steps{grid-template-columns:1fr 1fr}
+  .trio{grid-template-columns:1fr}
+  .trio>div{border-right:0;border-bottom:1px solid var(--rule)}
+  .trio>div:last-child{border-bottom:0}
 }
 @media (max-width:620px){
   .nav ul li:not(:last-child){display:none}
   .hero{padding:56px 0}
+  .hero-tabs{margin-top:40px}
   section{padding:60px 0}
   .services{grid-template-columns:1fr}
   .service{border-right:0 !important;border-bottom:1px solid var(--rule) !important}
   .service:last-child{border-bottom:0 !important}
   .steps{grid-template-columns:1fr}
-  .cta{padding:36px 26px}
+  .fields2{grid-template-columns:1fr}
+  form{padding:20px}
 }
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mark" viewBox="0 0 48 48"><g fill="#3A36C9"><circle cx="14" cy="29" r="8"/><circle cx="25" cy="21" r="11"/><circle cx="36" cy="29" r="8"/><rect x="14" y="29" width="22" height="8"/></g><path d="M18 31V18L32 31V18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40.5" cy="12" r="3.2" fill="#F5A524"/></symbol></svg>
 <header>
   <div class="wrap nav">
-    <a class="logo" href="#top">clod<span>Nx</span></a>
+    <a class="logo" href="#top" aria-label="clodNx home"><svg class="mark" aria-hidden="true"><use href="#mark"/></svg><span>clod<em>Nx</em></span></a>
     <ul>
-      <li><a class="link" href="#about">About ERPNext</a></li>
+      <li><a class="link" href="#about">ERPNext</a></li>
       <li><a class="link" href="#services">Services</a></li>
-      <li><a class="link" href="#process">Process</a></li>
+      <li><a class="link" href="#about-us">About us</a></li>
+      <li><a class="link" href="#contact">Contact us</a></li>
       <li><a class="btn" href="#contact">Book a call</a></li>
     </ul>
   </div>
@@ -123,29 +193,81 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <main id="top">
 
-  <div class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <h1>ERPNext, set up properly and built around how you work.</h1>
-        <p class="lead">clodNx helps growing businesses implement, customise and run ERPNext, from the first planning workshop to the day your team stops using spreadsheets.</p>
-        <div class="actions">
-          <a class="btn" href="#contact">Book a free consultation</a>
-          <a class="btn ghost" href="#services">See our services</a>
+  <div class="hero" data-t="0">
+    <div class="wrap">
+      <div class="slides">
+      <div class="slide hero-grid on">
+        <div>
+          <h1>ERPNext, set up properly and built around how you work.</h1>
+          <p class="lead">clodNx is an IT company that helps small and growing businesses run on ERPNext, HRMS and AI, from the first planning workshop to the day your team stops using spreadsheets.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Book a free consultation</a>
+            <a class="btn ghost" href="#services">See our services</a>
+          </div>
+        </div>
+        <div class="ledger" aria-label="ERPNext modules we work with">
+          <div class="ledger-head"><span>ERPNext module</span><span>What it covers</span></div>
+          <dl><div class="row"><dt>Accounting</dt><dd>Invoices, GST, ledgers</dd></div><div class="row"><dt>Selling and CRM</dt><dd>Leads, quotes, orders</dd></div><div class="row"><dt>Buying</dt><dd>Suppliers, purchase orders</dd></div><div class="row"><dt>Inventory</dt><dd>Stock, warehouses, batches</dd></div><div class="row"><dt>Manufacturing</dt><dd>BOMs, work orders</dd></div><div class="row"><dt>HR and Payroll</dt><dd>Attendance, leave, salary</dd></div><div class="row"><dt>Projects</dt><dd>Tasks, timesheets, billing</dd></div></dl>
         </div>
       </div>
-
-      <div class="ledger" aria-label="ERPNext modules we work with">
-        <div class="ledger-head"><span>ERPNext module</span><span>What it covers</span></div>
-        <dl>
-          <div class="row"><dt>Accounting</dt><dd>Invoices, GST, ledgers</dd></div>
-          <div class="row"><dt>Selling and CRM</dt><dd>Leads, quotes, orders</dd></div>
-          <div class="row"><dt>Buying</dt><dd>Suppliers, purchase orders</dd></div>
-          <div class="row"><dt>Inventory</dt><dd>Stock, warehouses, batches</dd></div>
-          <div class="row"><dt>Manufacturing</dt><dd>BOMs, work orders</dd></div>
-          <div class="row"><dt>HR and Payroll</dt><dd>Attendance, leave, salary</dd></div>
-          <div class="row"><dt>Projects</dt><dd>Tasks, timesheets, billing</dd></div>
-        </dl>
+      <div class="slide hero-grid">
+        <div>
+          <h1>AI agents and assistants that work from your own data.</h1>
+          <p class="lead">We build agentic workflows that handle routine tasks, and RAG assistants that answer from your documents, policies and ERPNext data, with sources.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Discuss an AI project</a>
+            <a class="btn ghost" href="#services">See our services</a>
+          </div>
+        </div>
+        <div class="ledger" aria-label="Agentic AI and RAG solutions">
+          <div class="ledger-head"><span>AI solution</span><span>What it does</span></div>
+          <dl><div class="row"><dt>AI agents</dt><dd>Follow-ups, approvals, reports</dd></div><div class="row"><dt>Document Q&amp;A</dt><dd>Answers from your own files</dd></div><div class="row"><dt>ERPNext assistant</dt><dd>Ask your data in plain words</dd></div><div class="row"><dt>Workflow automation</dt><dd>Tasks across your tools</dd></div><div class="row"><dt>Knowledge base</dt><dd>Searchable SOPs and policies</dd></div></dl>
+        </div>
       </div>
+      <div class="slide hero-grid">
+        <div>
+          <h1>HR that runs smoothly, from attendance to payroll.</h1>
+          <p class="lead">Frappe HRMS configured for your policies, so leave, attendance, payroll and hiring stay organised and accurate.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Plan your HR setup</a>
+            <a class="btn ghost" href="#services">See our services</a>
+          </div>
+        </div>
+        <div class="ledger" aria-label="HRMS services">
+          <div class="ledger-head"><span>HR module</span><span>What it covers</span></div>
+          <dl><div class="row"><dt>Attendance</dt><dd>Shifts, check-ins, overtime</dd></div><div class="row"><dt>Leave</dt><dd>Policies, balances, approvals</dd></div><div class="row"><dt>Payroll</dt><dd>Salary slips, deductions</dd></div><div class="row"><dt>Recruitment</dt><dd>Openings, interviews, offers</dd></div><div class="row"><dt>Appraisals</dt><dd>Goals, reviews, feedback</dd></div><div class="row"><dt>Employee records</dt><dd>Profiles and documents</dd></div></dl>
+        </div>
+      </div>
+      <div class="slide hero-grid">
+        <div>
+          <h1>Verify people inside your own workflow.</h1>
+          <p class="lead">Customer, tenant, vendor and employee verification built into your systems, with consent and data protection designed in.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Discuss verification</a>
+            <a class="btn ghost" href="#services">See our services</a>
+          </div>
+        </div>
+        <div class="ledger" aria-label="Identity verification services">
+          <div class="ledger-head"><span>Verification</span><span>Typical use</span></div>
+          <dl><div class="row"><dt>Customer KYC</dt><dd>Onboarding checks</dd></div><div class="row"><dt>Tenant verification</dt><dd>Rental screening</dd></div><div class="row"><dt>Vendor checks</dt><dd>Supplier onboarding</dd></div><div class="row"><dt>Employee verification</dt><dd>Hiring and joining</dd></div><div class="row"><dt>Audit trail</dt><dd>Every check recorded</dd></div></dl>
+        </div>
+      </div>
+      <div class="slide hero-grid">
+        <div>
+          <h1>Clear technology advice for growing businesses.</h1>
+          <p class="lead">We review your processes and tools, then recommend and build the simplest setup that fits, from software choice to migration and support.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Book a free consultation</a>
+            <a class="btn ghost" href="#services">See our services</a>
+          </div>
+        </div>
+        <div class="ledger" aria-label="IT consulting">
+          <div class="ledger-head"><span>Consulting</span><span>What you get</span></div>
+          <dl><div class="row"><dt>Process review</dt><dd>How you work today</dd></div><div class="row"><dt>Software selection</dt><dd>ERPNext or alternatives</dd></div><div class="row"><dt>Data migration</dt><dd>Tally, Excel, older ERPs</dd></div><div class="row"><dt>Custom development</dt><dd>Apps, portals, APIs</dd></div><div class="row"><dt>Training and support</dt><dd>Help after go-live</dd></div></dl>
+        </div>
+      </div>
+      </div>
+      <div class="hero-tabs" aria-label="Choose a service"><button class="tab" type="button">ERPNext</button><button class="tab" type="button">Agentic AI and RAG</button><button class="tab" type="button">HRMS</button><button class="tab" type="button">Identity verification</button><button class="tab" type="button">IT consulting</button></div>
     </div>
   </div>
 
@@ -165,32 +287,38 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="wrap">
       <div class="sec-head">
         <h2>Services</h2>
-        <p>Pick one service or have us handle the whole project. Either way you get a single point of contact.</p>
+        <p>From ERPNext to AI agents, we cover the systems a growing business actually runs on. Choose one service, or let us handle the whole project.</p>
       </div>
       <div class="services">
         <div class="service">
-          <h3>Implementation</h3>
-          <p>Company setup, chart of accounts, taxes, roles and permissions, configured for your business rather than left at defaults.</p>
+          <h3>ERPNext implementation for supply chain</h3>
+          <p>We set up ERPNext around how you buy, store and deliver, so stock, suppliers and orders stay in step.</p>
+          <p class="inc">Purchasing, inventory, warehouses, order tracking, manufacturing.</p>
         </div>
         <div class="service">
-          <h3>Consulting and process mapping</h3>
-          <p>We review how you sell, buy, stock and pay today, then design the simplest ERPNext setup that fits.</p>
+          <h3>HRMS services</h3>
+          <p>Frappe HRMS configured for your policies, so attendance, leave and salary run without manual work.</p>
+          <p class="inc">Attendance, leave, payroll, recruitment, appraisals.</p>
         </div>
         <div class="service">
-          <h3>Customisation</h3>
-          <p>Custom fields, print formats, workflows, reports and apps built on the Frappe framework, kept upgrade-safe.</p>
+          <h3>Identity verification</h3>
+          <p>Verify customers, tenants, vendors or employees inside your own workflow, with consent and data protection built in.</p>
+          <p class="inc">KYC checks, document capture, verification workflows, audit trail.</p>
         </div>
         <div class="service">
-          <h3>Data migration</h3>
-          <p>Customers, items, opening balances and history moved from Tally, Excel or your old ERP, cleaned and checked before go-live.</p>
+          <h3>Agentic AI and RAG</h3>
+          <p>AI agents that handle routine tasks across your systems, and assistants that answer from your own documents and data.</p>
+          <p class="inc">Task agents, document Q&amp;A, ERPNext data assistants, automation.</p>
         </div>
         <div class="service">
-          <h3>Integrations</h3>
-          <p>Connect ERPNext to payment gateways, e-commerce, shipping, e-invoicing, WhatsApp, biometric devices and your other tools.</p>
+          <h3>Custom IT and development</h3>
+          <p>Web apps, portals, APIs and integrations built to fit your business when standard software is not enough.</p>
+          <p class="inc">Frappe apps, portals, integrations, automation.</p>
         </div>
         <div class="service">
-          <h3>Training and support</h3>
-          <p>Hands-on sessions for each team, written guides, and a support plan for fixes, upgrades and new requests after launch.</p>
+          <h3>Consulting, migration and support</h3>
+          <p>We map your processes, move data from Tally, Excel or older systems, train your team and support you after launch.</p>
+          <p class="inc">Process review, data migration, training, ongoing support.</p>
         </div>
       </div>
     </div>
@@ -212,15 +340,68 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="contact">
+  <section id="about-us">
     <div class="wrap">
-      <div class="cta">
-        <div>
-          <h2>Thinking about ERPNext for your business?</h2>
-          <p>Tell us what you run today and what you want to fix. We will reply within one working day with honest advice, even if the answer is that ERPNext is not the right fit.</p>
-        </div>
-        <a class="btn" href="mailto:hello@clodnx.com?subject=ERPNext%20consultation">hello@clodnx.com</a>
+      <div class="sec-head">
+        <h2>About us</h2>
+        <p>clodNx is an IT company built for small businesses. We believe a small team deserves the same reliable systems as a large one, and we stay with every project until it works for the people using it.</p>
       </div>
+      <div class="trio">
+        <div>
+          <h3>Our journey</h3>
+          <ul class="path">
+            <li>Started by implementing ERPNext for small businesses</li>
+            <li>Grew into supply chain and HR with Frappe HRMS</li>
+            <li>Added identity verification services</li>
+            <li>Now building AI agents and RAG solutions</li>
+          </ul>
+        </div>
+        <div>
+          <h3>What success looks like</h3>
+          <p>A successful implementation is one your team uses every day. We measure it by a go-live that holds, data you can trust, and staff who no longer need us for routine tasks.</p>
+        </div>
+        <div>
+          <h3>Our commitment</h3>
+          <p>Small businesses are our focus, not an afterthought. We keep scope clear, explain things in plain language, give honest advice and support you after launch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-info">
+        <h2>Contact us</h2>
+        <p>Tell us about your business and what you want to fix. We reply within one working day with honest advice, even if ERPNext is not the right fit.</p>
+        <div class="channels">
+          <a class="channel" href="mailto:hello@clodnx.com"><small>Email</small><b>hello@clodnx.com</b></a>
+          <a class="channel" href="https://wa.me/918800288057?text=Hello%20clodNx%2C%20I%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener"><small>WhatsApp</small><b>+91 88002 88057</b></a>
+        </div>
+      </div>
+
+      <form id="contact-form" novalidate>
+        <div class="fields2">
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="fields2">
+          <div class="field"><label for="phone">Phone (optional)</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="interest">I am interested in</label>
+            <select id="interest" name="interest">
+              <option>ERPNext implementation</option>
+              <option>HR management (HRMS)</option>
+              <option>Supply chain management</option>
+              <option>Identity verification</option>
+              <option>AI agents or RAG</option>
+              <option>Custom solution</option>
+              <option>Something else</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
+        <button class="btn" type="submit">Send message</button>
+        <p class="note" id="form-status" role="status" aria-live="polite">Sending opens your email app with the message ready to go.</p>
+      </form>
     </div>
   </section>
 
@@ -228,10 +409,52 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <footer>
   <div class="wrap">
+    <a class="logo" href="#top"><svg class="mark" aria-hidden="true"><use href="#mark"/></svg><span>clod<em>Nx</em></span></a>
     <span>© 2026 clodNx. All rights reserved.</span>
-    <span>ERPNext is a trademark of Frappe Technologies. clodNx is an independent consultancy.</span>
+    <span>ERPNext is a trademark of Frappe Technologies. clodNx is an independent IT company.</span>
   </div>
 </footer>
 
+<script>
+(function(){
+  var f=document.getElementById('contact-form'), st=document.getElementById('form-status');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var d=new FormData(f), n=(d.get('name')||'').trim(), em=(d.get('email')||'').trim(), m=(d.get('message')||'').trim();
+    if(!n||!em||!m||!/^\S+@\S+\.\S+$/.test(em)){
+      st.textContent='Please fill in your name, a valid email and a message.';
+      return;
+    }
+    var body='Name: '+n+'\nEmail: '+em+'\nPhone: '+((d.get('phone')||'').trim()||'-')+'\nInterested in: '+d.get('interest')+'\n\n'+m;
+    window.location.href='mailto:hello@clodnx.com?subject='+encodeURIComponent('Enquiry from '+n)+'&body='+encodeURIComponent(body);
+    st.textContent='Your email app should open with the message ready. If it does not, write to hello@clodnx.com or message us on WhatsApp.';
+  });
+})();
+</script>
+<script>
+(function(){
+  var hero=document.querySelector('.hero'), slides=[].slice.call(hero.querySelectorAll('.slide')),
+      tabs=[].slice.call(hero.querySelectorAll('.tab')), bar=hero.querySelector('.hero-tabs'), cur=0;
+  function show(i){
+    cur=(i+slides.length)%slides.length;
+    hero.setAttribute("data-t",cur);
+    slides.forEach(function(s,n){s.classList.toggle('on',n===cur);});
+    tabs.forEach(function(t){t.classList.remove('on');t.removeAttribute('aria-current');});
+    void tabs[cur].offsetWidth;
+    tabs[cur].classList.add('on');tabs[cur].setAttribute('aria-current','true');
+    bar.scrollTo({left:tabs[cur].offsetLeft-16,behavior:'smooth'});
+  }
+  tabs.forEach(function(t,n){
+    t.addEventListener('click',function(){if(n!==cur)show(n);});
+    t.addEventListener('animationend',function(){show(cur+1);});
+  });
+  function pause(){hero.classList.add('paused');}
+  function play(){hero.classList.remove('paused');}
+  if(window.matchMedia('(hover:hover)').matches){hero.addEventListener('mouseenter',pause);hero.addEventListener('mouseleave',play);}
+  hero.addEventListener('focusin',function(e){if(e.target.matches(':focus-visible'))pause();});
+  hero.addEventListener('focusout',play);
+  show(0);
+})();
+</script>
 </body>
 </html>
